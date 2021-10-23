@@ -15,6 +15,7 @@ File myFile;
 
 int pinCS = 53;
 
+int gasSensor = A4;
 
 int pumpPin1=2;
 int pumpPin2=3;
@@ -54,7 +55,7 @@ void setup()
   digitalWrite(pumpPin4,HIGH);
 }
 
-void save_temperature() {
+void saveTemperature() {
   myFile = SD.open("temp.txt", FILE_WRITE);
   myFile.print(hour());
   myFile.print(":");
@@ -66,7 +67,9 @@ void save_temperature() {
   myFile.print(":");
   myFile.print(year());
   myFile.print(",");
-  myFile.println(int()); //save air quality data
+  float ppm;
+  ppm = analogRead(gasSensor);  // read ppm value
+  myFile.println(ppm); // save air quality data
   myFile.close();
 }
 
@@ -88,6 +91,8 @@ void loop()
 {
   // put your main code here, to run repeatedly:
 
+  // PPM read and print
+  saveTemperature();
   
   // Watering
   int inputSensorPin1Value = analogRead(inputSensorPin1);
