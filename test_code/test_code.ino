@@ -1,4 +1,9 @@
-#include <avr/sleep.h>
+
+const int inputSensorPin1=A8;
+const int inputSensorPin2=A9;
+const int inputSensorPin3=A10;
+const int inputSensorPin4=A11;
+const int inputSensorPin5=A12;
 
 void setup()
 {
@@ -7,22 +12,30 @@ void setup()
 
 void loop()
 {
-  Serial.println("Program is on");
-  Serial.flush ();
-  sleepNow();
-}
-
-void sleepNow()
-{
-  // Choose our preferred sleep mode:
-  set_sleep_mode(SLEEP_MODE_PWR_SAVE);
-  // Set sleep enable (SE) bit:
-  sleep_enable();
-  // Put the device to sleep:
-  sleep_mode();
-  // Upon waking up, sketch continues from this point.
-  sleep_disable();
-
-  int sensorValue = analogRead(0); // Read analog input pin A0
-  Serial.println(sensorValue, DEC); // Print the value read
+  /*
+  for(int i = 0 ; i<20 ; i++)
+  {Serial.println(analogRead(inputSensorPin1));
+  delay(500);}
+  Serial.println("");
+  
+  for(int i = 0 ; i<20 ; i++)
+  {Serial.println(analogRead(inputSensorPin2));
+  delay(500);}
+  Serial.println("");
+  
+  for(int i = 0 ; i<20 ; i++)
+  {Serial.println(analogRead(inputSensorPin3));
+  delay(500);}
+  Serial.println("");
+  
+  for(int i = 0 ; i<20 ; i++)
+  {Serial.println(analogRead(inputSensorPin4));
+  delay(500);}
+  Serial.println("");
+  */
+  
+  for(int i = 0 ; i<20 ; i++)
+  {Serial.println(analogRead(inputSensorPin5));
+  delay(500);}
+  //Serial.println("");
 }

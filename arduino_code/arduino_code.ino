@@ -1,13 +1,13 @@
 #define SENSOR_READ_DELAY 10000 // 1 minute   // 86400000 for once a day.
-#define MIN_WATER_LEVEL 12
+#define MIN_WATER_LEVEL 1200
 #define FULL_MOISTURE_READING 290
 #define NO_MOISTURE_READING 595
 #define CUT_OFF_MOISTURE_PERCENATGE 50
-#define PUMP1_WATERING_TIME 2000  //This is millis
-#define PUMP2_WATERING_TIME 2000  //This is millis
-#define PUMP3_WATERING_TIME 2000  //This is millis
-#define PUMP4_WATERING_TIME 2000  //This is millis
-#define PUMP5_WATERING_TIME 2000  //This is millis
+#define PUMP1_WATERING_TIME 4000  //This is millis
+#define PUMP2_WATERING_TIME 4000  //This is millis
+#define PUMP3_WATERING_TIME 4000  //This is millis
+#define PUMP4_WATERING_TIME 4000  //This is millis
+#define PUMP5_WATERING_TIME 4000  //This is millis
 
 #include <SD.h>
 #include <SPI.h>
@@ -16,25 +16,26 @@ File myFile;
 
 const int pinCS = 53;
 
-const int gasSensor = A0;
+const int gasSensor = A7;
 
-const int trigPin = 30;
-const int echoPin = 31;
+const int trigPin = 41;
+const int echoPin = 40;
 
 long duration;
 int distance;
 
-int pumpPin1=2;
-int pumpPin2=3;
-int pumpPin3=4;
-int pumpPin4=5;
-int pumpPin5=6;
+const int pumpPin1=2;
+const int pumpPin2=3;
+const int pumpPin3=4;
+const int pumpPin4=5;
+const int pumpPin5=6;
+const int co2Pin=7;
 
-int inputSensorPin1=A8;
-int inputSensorPin2=A9;
-int inputSensorPin3=A10;
-int inputSensorPin4=A11;
-int inputSensorPin5=A12;
+const int inputSensorPin1=A8;
+const int inputSensorPin2=A9;
+const int inputSensorPin3=A10;
+const int inputSensorPin4=A11;
+const int inputSensorPin5=A12;
 
 void setup() 
 {
@@ -60,12 +61,14 @@ void setup()
   pinMode(pumpPin3,OUTPUT);
   pinMode(pumpPin4,OUTPUT);
   pinMode(pumpPin5,OUTPUT);
+  pinMode(co2Pin,OUTPUT);
 
   digitalWrite(pumpPin1,HIGH);
   digitalWrite(pumpPin2,HIGH);
   digitalWrite(pumpPin3,HIGH);
   digitalWrite(pumpPin4,HIGH);
   digitalWrite(pumpPin5,HIGH);
+  digitalWrite(co2Pin,HIGH);
 }
 
 void getDistance() {
@@ -84,6 +87,9 @@ void getDistance() {
 }
 
 void saveAirQuality() {
+  digitalWrite(co2Pin, LOW);
+  delay(2500);
+  digitalWrite(co2Pin, HIGH);
   myFile = SD.open("temp.txt", FILE_WRITE);
   float ppm;
   ppm = analogRead(gasSensor);  // read ppm value
@@ -119,42 +125,47 @@ void getMoisturePercentageAndWaterIt(int sensorValue, int outPinNo, int watering
 
 void loop() 
 {
-  delay(4000);
+  delay(2000);
   // put your main code here, to run repeatedly:
 
   getDistance();
   if(distance < MIN_WATER_LEVEL)
   {
+    delay(2500);
     Serial.println("");
     // PPM read and print
     saveAirQuality();
 
+    delay(2500);
+
     Serial.println("");
     // Watering
+    
     int inputSensorPin1Value = analogRead(inputSensorPin1);
     getMoisturePercentageAndWaterIt(inputSensorPin1Value, pumpPin1, PUMP1_WATERING_TIME);
   
-    delay(1000);
+    delay(2500);
     
     int inputSensorPin2Value = analogRead(inputSensorPin2);
     getMoisturePercentageAndWaterIt(inputSensorPin2Value, pumpPin2, PUMP2_WATERING_TIME);
   
-    delay(1000);
+    delay(2500);
     
     int inputSensorPin3Value = analogRead(inputSensorPin3);
     getMoisturePercentageAndWaterIt(inputSensorPin3Value, pumpPin3, PUMP3_WATERING_TIME);
+    
   
-    delay(1000);
+    delay(2500);
     
     int inputSensorPin4Value = analogRead(inputSensorPin4);
     getMoisturePercentageAndWaterIt(inputSensorPin4Value, pumpPin4, PUMP4_WATERING_TIME);
   
-    delay(1000);
+    delay(2500);
   
-    int inputSensorPin5Value = analogRead(inputSensorPin5);
+    int inputSensorPin5Value = analogRead(inputSensorPin3); // stricat
     getMoisturePercentageAndWaterIt(inputSensorPin5Value, pumpPin5, PUMP5_WATERING_TIME);
   
-    delay(1000);
+    delay(2500);
    }
 
   else{
