@@ -1,13 +1,13 @@
-#define SENSOR_READ_DELAY 10000 // 1 minute   // 86400000 for once a day.
-#define MIN_WATER_LEVEL 1200
+#define SENSOR_READ_DELAY 60000 // 1 minute   // 86400000 for once a day.
+#define MIN_WATER_LEVEL 12000
 #define FULL_MOISTURE_READING 290
 #define NO_MOISTURE_READING 595
-#define CUT_OFF_MOISTURE_PERCENATGE 50
-#define PUMP1_WATERING_TIME 4000  //This is millis
-#define PUMP2_WATERING_TIME 4000  //This is millis
-#define PUMP3_WATERING_TIME 4000  //This is millis
-#define PUMP4_WATERING_TIME 4000  //This is millis
-#define PUMP5_WATERING_TIME 4000  //This is millis
+#define CUT_OFF_MOISTURE_PERCENATGE 101
+#define PUMP1_WATERING_TIME 30000  //This is millis
+#define PUMP2_WATERING_TIME 30000  //This is millis
+#define PUMP3_WATERING_TIME 30000  //This is millis
+#define PUMP4_WATERING_TIME 30000  //This is millis
+#define PUMP5_WATERING_TIME 30000  //This is millis
 
 #include <SD.h>
 #include <SPI.h>
@@ -32,10 +32,10 @@ const int pumpPin5=6;
 const int co2Pin=7;
 
 const int inputSensorPin1=A8;
-const int inputSensorPin2=A9;
+const int inputSensorPin2=A12;
 const int inputSensorPin3=A10;
 const int inputSensorPin4=A11;
-const int inputSensorPin5=A12;
+const int inputSensorPin5=A9;
 
 void setup() 
 {
@@ -146,7 +146,7 @@ void loop()
   
     delay(2500);
     
-    int inputSensorPin2Value = analogRead(inputSensorPin2);
+    int inputSensorPin2Value = analogRead(inputSensorPin1);  //stricat
     getMoisturePercentageAndWaterIt(inputSensorPin2Value, pumpPin2, PUMP2_WATERING_TIME);
   
     delay(2500);
@@ -162,7 +162,7 @@ void loop()
   
     delay(2500);
   
-    int inputSensorPin5Value = analogRead(inputSensorPin3); // stricat
+    int inputSensorPin5Value = analogRead(inputSensorPin5);
     getMoisturePercentageAndWaterIt(inputSensorPin5Value, pumpPin5, PUMP5_WATERING_TIME);
   
     delay(2500);
